@@ -36,7 +36,7 @@ if (Test-Path -Path $AdvancedDir) {
 else {
     New-Item -ItemType Directory -Force -Path $AdvancedDir
 }
-Copy-Item "audit.csv" -Destination $AdvancedDir
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/BeanBagKing/BaselineLogging/main/audit.csve" -OutFile "$AdvancedDir\audit.csv"
 
 # Force audit policy subcategory settings 
 Write-Host "Forcing Subcategory Settings" -ForegroundColor Yellow
