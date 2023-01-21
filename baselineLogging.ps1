@@ -10,7 +10,7 @@ Import-Module PolicyFileEditor
 
 # Create the PSTranscription directory for later
 Write-Host "Creating PSTranscription Directory" -ForegroundColor Yellow
-$PSTranscriptionDir = "C:\PStranscription"
+$PSTranscriptionDir = "$env:SystemDrive\PStranscription"
 if (Test-Path -Path $PSTranscriptionDir) {
     Write-Host "PSTranscription Path Exists, Skipping"
 }
@@ -21,11 +21,13 @@ else {
 # Import settings from PolicyFileEditor File
 Write-Host "Importing Local Policy Settings" -ForegroundColor Yellow
 $MachineDir = "$env:windir\system32\GroupPolicy\Machine\registry.pol"
-$MachinePols = Import-Clixml -Path 'MachinePol.xml'
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/BeanBagKing/BaselineLogging/main/MachinePol.xml" -OutFile "$env:SystemDrive\MachinePol.xml"
+$MachinePols = Import-Clixml -Path '$env:SystemDrive\MachinePol.xml'
 foreach ($MachinePol in $MachinePols) {
     Write-Host "importing " $MachinePol.Key " " $MachinePol.ValueName
     $MachinePol | Set-PolicyFileEntry -Path $MachineDir
 }
+Remove-Item -Path "$env:SystemDrive\MachinePol.xml"
 
 ## Import advanced settings from audit.csv File
 Write-Host "Importing Advanced Settings" -ForegroundColor Yellow
@@ -36,7 +38,7 @@ if (Test-Path -Path $AdvancedDir) {
 else {
     New-Item -ItemType Directory -Force -Path $AdvancedDir
 }
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/BeanBagKing/BaselineLogging/main/audit.csve" -OutFile "$AdvancedDir\audit.csv"
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/BeanBagKing/BaselineLogging/main/audit.csv" -OutFile "$AdvancedDir\audit.csv"
 
 # Force audit policy subcategory settings 
 Write-Host "Forcing Subcategory Settings" -ForegroundColor Yellow
@@ -102,11 +104,11 @@ Start-Process -FilePath "$env:windir\Sysmon\Sysmon.exe" -ArgumentList "-accepteu
 
 # Remove Old PSTranscription
 Write-Host "Creating Scheduled Task to Remove Old PSTranscription Files" -ForegroundColor Yellow
-$action = New-ScheduledTaskAction -Execute 'Powershell.exe' -Argument '"Get-ChildItem C:\PSTranscription -Recurse | Where-Object { $_.LastWriteTime -lt (Get-Date).AddDays(-90) } | Remove-Item –Recurse"'
+$action = New-ScheduledTaskAction -Execute 'Powershell.exe' -Argument '"Get-ChildItem $env:SystemDrive\PSTranscription -Recurse | Where-Object { $_.LastWriteTime -lt (Get-Date).AddDays(-90) } | Remove-Item –Recurse"'
 $trigger = New-ScheduledTaskTrigger -Daily -At 9am
 $description = "Cleans PSTranscription Logs (Default: Over 90 Days Old)"
 $settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
-Register-ScheduledTask -Action $action -Trigger $trigger -TaskName "Cleanup PSTranscription" -Description $description -Settings $Settings -RunLevel Highest
+Register-ScheduledTask -Action $action -Trigger $trigger -TaskName "Cleanup PSTranscription" -Description $description -Settings $Settings -RunLevel Highest -Force
 
 ## Things left to do
 # test for audit.csv path and file, don't clobber current settings if it's already there
