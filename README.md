@@ -28,3 +28,24 @@ This works well, in my limited testing, for new systems and/or forensic sandboxe
 
 ### ToDo
 * test for audit.csv path and file, don't clobber current settings if it's already there
+
+### Exporting Current Policies
+```
+gpupdate /force
+
+$MachineDir = "$env:windir\system32\GroupPolicy\Machine\registry.pol"
+$UserDir = "$env:windir\system32\GroupPolicy\User\registry.pol"
+
+Get-PolicyFileEntry -Path $MachineDir -All | Export-Clixml -Path C:\MachinePol.xml
+Get-PolicyFileEntry -Path $UserDir -All | Export-Clixml -Path C:\UserPol.xml
+```
+
+### This is just a sample of the options availible to Advanced Audit Settings 
+List these with `auditpol /get /category:*`
+```
+Machine Name,Policy Target,Subcategory,Subcategory GUID,Inclusion Setting,Exclusion Setting,Setting Value
+,System,Audit Process Creation,{0cce922b-69ae-11d9-bed3-505054503030},Success and Failure,,3
+,System,Audit Process Termination,{0cce922c-69ae-11d9-bed3-505054503030},Success,,1
+,System,Audit RPC Events,{0cce922e-69ae-11d9-bed3-505054503030},Failure,,2
+,System,Audit Token Right Adjusted,{0cce924a-69ae-11d9-bed3-505054503030},No Auditing,,0
+```
