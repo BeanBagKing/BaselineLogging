@@ -65,7 +65,7 @@ if ($CurrentWindowsPrincipal.IsInRole([System.Security.Principal.WindowsBuiltInR
         Write-Host "Server OS Found, Setting"
         reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" /v EnablePrefetcher /t REG_DWORD /d 3 /f
         reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Prefetcher" /v MaxPrefetchFiles /t REG_DWORD /d 8192 /f
-        Enable-MMAgent –OperationAPI
+        Enable-MMAgent -OperationAPI
         net start sysmain
     }
     else { 
@@ -117,7 +117,7 @@ if ($CurrentWindowsPrincipal.IsInRole([System.Security.Principal.WindowsBuiltInR
 
     # Remove Old PSTranscription
     Write-Host "Creating Scheduled Task to Remove Old PSTranscription Files" -ForegroundColor Yellow
-    $action = New-ScheduledTaskAction -Execute 'Powershell.exe' -Argument '"Get-ChildItem $env:SystemDrive\PSTranscription -Recurse | Where-Object { $_.LastWriteTime -lt (Get-Date).AddDays(-90) } | Remove-Item –Recurse"'
+    $action = New-ScheduledTaskAction -Execute 'Powershell.exe' -Argument '"Get-ChildItem $env:SystemDrive\PSTranscription -Recurse | Where-Object { $_.LastWriteTime -lt (Get-Date).AddDays(-90) } | Remove-Item -Recurse"'
     $trigger = New-ScheduledTaskTrigger -Daily -At 9am
     $description = "Cleans PSTranscription Logs (Default: Over 90 Days Old)"
     $settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
