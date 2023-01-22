@@ -8,7 +8,7 @@ Only baselineLogging.ps1 is needed, all other files are fetched.
 Run from Administrator prompt
 Run
   Set-ExecutionPolicy RemoteSigned -Force
-before starting. Script will change it back to the default (Restricted) when it's finished
+before starting.
 ```
 
 * Will also set explorer to show file extensions, and set dangerous extensions to be opened with notepad.exe
