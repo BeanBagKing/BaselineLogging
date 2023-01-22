@@ -1,5 +1,5 @@
 # Before running set execution to remote signed
-# Set-ExecutionPolicy RemoteSigned -Force
+Set-ExecutionPolicy RemoteSigned -Force # Leave this set for profile.ps1 scrit
 # Script will change execution policy back to Restricted once it's done
 
 #Returns a WindowsIdentity object that represents the current Windows user.
@@ -141,7 +141,6 @@ if ($CurrentWindowsPrincipal.IsInRole([System.Security.Principal.WindowsBuiltInR
     Stop-Process -processName: Explorer -force # This will restart the Explorer service to make this work.
 
     gpupdate /force
-    Set-ExecutionPolicy Restricted -Force
     Write-Host "Finished" -ForegroundColor Green
     Write-Host -NoNewLine 'Press any key to continue...';
     $null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
