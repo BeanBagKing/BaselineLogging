@@ -118,6 +118,27 @@ if ($CurrentWindowsPrincipal.IsInRole([System.Security.Principal.WindowsBuiltInR
     $settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
     Register-ScheduledTask -Action $action -Trigger $trigger -TaskName "Cleanup PSTranscription" -Description $description -Settings $Settings -RunLevel Highest -Force
 
+    # Associate Dangerous Extentions with Notepad
+    Write-Host "Associate Dangerous Extentions with Notepad" -ForegroundColor Yellow
+    $exts=@("cmd","bat","ps1","psm1","js","hta","vbs")
+    echo "## setting up file associations"
+    foreach ($ext in $exts){
+        $extfile=$ext+"file"
+        $dotext="." + $ext
+        cmd /c assoc $dotext=$extfile
+        cmd /c "ftype $extfile=""C:\Windows\notepad.exe"" ""%1"""
+        echo ""
+    }
+
+    # Show File Extensions
+    Write-Host "Show File Extensions" -ForegroundColor Yellow
+    # http://superuser.com/questions/666891/script-to-set-hide-file-extensions
+    Push-Location
+    Set-Location HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+    Set-ItemProperty . HideFileExt "0"
+    Pop-Location
+    Stop-Process -processName: Explorer -force # This will restart the Explorer service to make this work.
+
     ## Things left to do
     # test for audit.csv path and file, don't clobber current settings if it's already there
     # store audit.csv and MachinePol.xml in this file, less moving stuff around?
