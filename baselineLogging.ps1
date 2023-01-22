@@ -140,11 +140,6 @@ if ($CurrentWindowsPrincipal.IsInRole([System.Security.Principal.WindowsBuiltInR
     Pop-Location
     Stop-Process -processName: Explorer -force # This will restart the Explorer service to make this work.
 
-    ## Things left to do
-    # test for audit.csv path and file, don't clobber current settings if it's already there
-    # store audit.csv and MachinePol.xml in this file, less moving stuff around?
-    # Get current execution policy, and reset it to what it was once the script is finished
-
     gpupdate /force
     Set-ExecutionPolicy Restricted -Force
     Write-Host "Finished" -ForegroundColor Green
