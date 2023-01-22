@@ -1,3 +1,7 @@
+# Before running set execution to remote signed
+# Set-ExecutionPolicy RemoteSigned -Force
+# Script will change execution policy back to Restricted once it's done
+
 #Returns a WindowsIdentity object that represents the current Windows user.
 $CurrentWindowsIdentity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
 #creating a new object of type WindowsPrincipal, and passing the Windows Identity to the constructor.
@@ -5,12 +9,9 @@ $CurrentWindowsPrincipal = New-Object System.Security.Principal.WindowsPrincipal
 #Return True if specific user is Admin else return False
 if ($CurrentWindowsPrincipal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)) {
     Write-Host "Admin permission is available and Code is running as administrator" -ForegroundColor Green
-
     # Install Necessary Modules
     Write-Host "-------------- Starting --------------" -ForegroundColor Green
     Write-Host "Installing Inital Necessay Modules" -ForegroundColor Yellow
-    $startingPolicy = Get-ExecutionPolicy # Store this to revert later
-    Set-ExecutionPolicy RemoteSigned -Force
     Install-PackageProvider -Name NuGet -Force
     Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
     Install-Module -Name PolicyFileEditor -RequiredVersion 3.0.0 -Scope CurrentUser # This is what allows us to set local GPO
@@ -120,14 +121,14 @@ if ($CurrentWindowsPrincipal.IsInRole([System.Security.Principal.WindowsBuiltInR
 
     # Associate Dangerous Extentions with Notepad
     Write-Host "Associate Dangerous Extentions with Notepad" -ForegroundColor Yellow
-    $exts=@("cmd","bat","ps1","psm1","js","hta","vbs")
-    echo "## setting up file associations"
-    foreach ($ext in $exts){
-        $extfile=$ext+"file"
-        $dotext="." + $ext
+    $exts = @("cmd", "bat", "ps1", "psm1", "js", "hta", "vbs")
+    Write-Host "## setting up file associations"
+    foreach ($ext in $exts) {
+        $extfile = $ext + "file"
+        $dotext = "." + $ext
         cmd /c assoc $dotext=$extfile
         cmd /c "ftype $extfile=""C:\Windows\notepad.exe"" ""%1"""
-        echo ""
+        Write-Host ""
     }
 
     # Show File Extensions
@@ -143,14 +144,15 @@ if ($CurrentWindowsPrincipal.IsInRole([System.Security.Principal.WindowsBuiltInR
     # test for audit.csv path and file, don't clobber current settings if it's already there
     # store audit.csv and MachinePol.xml in this file, less moving stuff around?
     # Get current execution policy, and reset it to what it was once the script is finished
+
     Write-Host "Finished" -ForegroundColor Green
+    Set-ExecutionPolicy Restricted -Force
     Write-Host -NoNewLine 'Press any key to continue...';
     $null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
-
 }
 else {
     Write-Host "Insufficient permissions to run this script. Open the PowerShell console as an administrator and run this script again." -ForegroundColor Red
-    Write-Host -NoNewLine 'Press any key to continue...';
+    Write-Host -NoNewLine "Press any key to continue...";
     $null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
-    Break
+    Break;
 }
