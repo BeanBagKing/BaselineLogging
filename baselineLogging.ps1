@@ -53,6 +53,10 @@ if ($CurrentWindowsPrincipal.IsInRole([System.Security.Principal.WindowsBuiltInR
     Write-Host "Forcing Subcategory Settings" -ForegroundColor Yellow
     New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Lsa" -Name "SCENoApplyLegacyAuditPolicy" -Value 1 -PropertyType DWord -Force 
 
+    # Increase Security Auditing Size
+    Write-Host "Increase Security Auditing Size" -ForegroundColor Yellow
+    New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\EventLog\Security" -Name "MaxSize" -Value 97656 -PropertyType DWord -Force 
+
     # Enable Prefetch on Servers
     Write-Host "Enabling Prefetch On Servers" -ForegroundColor Yellow
     $osInfo = Get-CimInstance -ClassName Win32_OperatingSystem
@@ -145,8 +149,9 @@ if ($CurrentWindowsPrincipal.IsInRole([System.Security.Principal.WindowsBuiltInR
     # store audit.csv and MachinePol.xml in this file, less moving stuff around?
     # Get current execution policy, and reset it to what it was once the script is finished
 
-    Write-Host "Finished" -ForegroundColor Green
+    gpupdate /force
     Set-ExecutionPolicy Restricted -Force
+    Write-Host "Finished" -ForegroundColor Green
     Write-Host -NoNewLine 'Press any key to continue...';
     $null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
 }
