@@ -20,6 +20,7 @@ before starting.
 * https://web.archive.org/web/20181018000009/http:/brandonpadgett.com/powershell/Local-gpo-powershell/
 * https://serverfault.com/questions/848388/how-to-edit-local-group-policy-with-a-script
 * https://github.com/dlwyatt/PolicyFileEditor
+* Also general references regarding logging at the bottom of https://nullsec.us/windows-baseline-logging/
 
 ### Description
 Hey, this is mostly for keywords. This attempts to automate all the settings I have in my baseline logging post. In addition to the typical local group policy settings and advanced configuration settings, such as logon events, and command line logging, this will create the necessary directories for PSTranscription files, the scheduled task to clean them up, download and install Sysmon with the Swift on Security config, and enable firewall logging. 
