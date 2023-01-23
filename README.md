@@ -24,7 +24,7 @@ before starting.
 ### Description
 Hey, this is mostly for keywords. This attempts to automate all the settings I have in my baseline logging post. In addition to the typical local group policy settings and advanced configuration settings, such as logon events, and command line logging, this will create the necessary directories for PSTranscription files, the scheduled task to clean them up, download and install Sysmon with the Swift on Security config, and enable firewall logging. 
 
-This works well, in my limited testing, for new systems and/or forensic sandboxes or other temporary systems. An enterprise environment should test these settings to ensure they don't overwhelm their environment, deploy via a proper mechanism (e.g. GPO), and **CENTRALIZE YOUR F@#$# LOGS!** Please, please centralize them. If you can't however, this is a good start. I have expanded the storage for security logs from 20mb to 100mb here. I would recommend ensuring at least 90 days are retained for all important logs in production.
+This works well, in my limited testing, for new systems and/or forensic sandboxes or other temporary systems. An enterprise environment should test these settings to ensure they don't overwhelm their environment, deploy via a proper mechanism (e.g. GPO), and **CENTRALIZE YOUR LOGS!** Please, please centralize them. If you can't however, this is a good start. I have expanded the storage for security logs from 20mb to 100mb here. I would recommend ensuring at least 90 days are retained for all important logs in production.
 
 ### ToDo
 * test for audit.csv path and file, don't clobber current settings if it's already there
