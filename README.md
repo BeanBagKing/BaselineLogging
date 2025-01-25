@@ -7,7 +7,7 @@ Work in progress. If there are already settings in place, this may clobber them.
 Only baselineLogging.ps1 is needed, all other files are fetched.
 Run from Administrator prompt
 Run
-  Set-ExecutionPolicy RemoteSigned -Force
+  Set-ExecutionPolicy Unrestricted -Force
 before starting.
 ```
 
