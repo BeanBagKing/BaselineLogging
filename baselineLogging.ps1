@@ -1,7 +1,3 @@
-# Before running set execution to remote signed
-Set-ExecutionPolicy RemoteSigned -Force # Leave this set for profile.ps1 scrit
-# Script will change execution policy back to Restricted once it's done
-
 #Returns a WindowsIdentity object that represents the current Windows user.
 $CurrentWindowsIdentity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
 #creating a new object of type WindowsPrincipal, and passing the Windows Identity to the constructor.
@@ -151,3 +147,7 @@ else {
     $null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
     Break;
 }
+
+# Setting execution policy
+Set-ExecutionPolicy RemoteSigned -Force # Leave this set for profile.ps1 scrit
+# Script will change execution policy back to Restricted once it's done
