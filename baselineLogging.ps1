@@ -7,7 +7,7 @@ if ($CurrentWindowsPrincipal.IsInRole([System.Security.Principal.WindowsBuiltInR
     Write-Host "Admin permission is available and Code is running as administrator" -ForegroundColor Green
     # Install Necessary Modules
     Write-Host "-------------- Starting --------------" -ForegroundColor Green
-    Write-Host "Installing Inital Necessay Modules" -ForegroundColor Yellow
+    Write-Host "Installing Initial Necessary Modules" -ForegroundColor Yellow
     Install-PackageProvider -Name NuGet -Force
     Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
     Install-Module -Name PolicyFileEditor -RequiredVersion 3.0.0 -Scope CurrentUser # This is what allows us to set local GPO
