@@ -9,6 +9,10 @@ Run from Administrator prompt
 Run
   Set-ExecutionPolicy Unrestricted -Force
 before starting.
+
+This can be used to download the file to the current directory
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/BeanBagKing/BaselineLogging/refs/heads/main/baselineLogging.ps1" -OutFile "./baselineLogging.ps1"
+
 ```
 
 * Will also set explorer to show file extensions, and set dangerous extensions to be opened with notepad.exe
