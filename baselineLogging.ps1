@@ -101,7 +101,7 @@ if ($CurrentWindowsPrincipal.IsInRole([System.Security.Principal.WindowsBuiltInR
     Write-Host "Installing Sysmon" -ForegroundColor Yellow
     $SysmonDir = "$env:windir\Sysmon"
     New-Item -ItemType Directory -Force -Path $SysmonDir
-    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/SwiftOnSecurity/sysmon-config/master/sysmonconfig-export.xml" -OutFile "$SysmonDir\sysmonconfig-export.xml"
+    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Neo23x0/sysmon-config/refs/heads/master/sysmonconfig-export.xml" -OutFile "$SysmonDir\sysmonconfig-export.xml"
     Invoke-WebRequest -Uri "https://live.sysinternals.com/Sysmon.exe" -OutFile "$SysmonDir\Sysmon.exe"
     #C:\Windows\Sysmon\Sysmon.exe -accepteula -i c:\Windows\Sysmon\sysmonconfig-export.xml
     Start-Process -FilePath "$env:windir\Sysmon\Sysmon.exe" -ArgumentList "-accepteula -i $env:windir\Sysmon\sysmonconfig-export.xml"
